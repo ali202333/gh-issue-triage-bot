@@ -1,4 +1,4 @@
-# 🤖 GitHub Issue Triage Bot
+#  GitHub Issue Triage Bot
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![CI](https://github.com/ali202333/gh-issue-triage-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/ali202333/gh-issue-triage-bot/actions/workflows/ci.yml)
