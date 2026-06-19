@@ -1,15 +1,15 @@
-FROM node:22-alpine
+FROM node:20-slim
 
-RUN addgroup --system app && adduser --system --ingroup app app
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl ca-certificates python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY package.json /app/package.json
 WORKDIR /app
 
-RUN npm install --omit=dev
+COPY package*.json ./
+RUN npm ci --no-audit --no-fund
 
 COPY . .
-
-EXPOSE 3000
-USER app
+RUN npm run db:generate
 
 CMD ["node", "src/index.js"]

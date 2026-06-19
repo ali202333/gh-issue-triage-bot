@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: gh_issue_triage
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+    env:
+      DATABASE_URL: postgresql://test:test@localhost:5432/gh_issue_triage?schema=public
+      REDIS_URL: rediss://localhost:6379
+      GITHUB_WEBHOOK_SECRET: testsecret
+      ENCRYPTION_KEY: ZmVybWF0ZWJ1dHRvbl92ZXJfYXRfbXlfc2VjcmV0X2tleQ==
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run db:migrate
+      - run: npm run worker -- --once
+      - run: npm test

@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: gh-triage-bot
+    runtime: node
+    plan: starter
+    buildCommand: npm install && npm run db:generate
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: gh-triage-db
+          property: connectionString
+
+databases:
+  - name: gh-triage-db
+    plan: starter
+    databaseName: gh_issue_triage
+    user: gh_triage
