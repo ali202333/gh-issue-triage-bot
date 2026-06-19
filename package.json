@@ -1,14 +1,25 @@
 {
   "name": "gh-issue-triage-bot",
   "version": "1.0.0",
-  "private": true,
-  "type": "module",
+  "description": "Multi-tenant AI Issue Triage Agent System",
+  "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "worker": "node src/worker.js",
+    "db:migrate": "npx prisma migrate deploy",
+    "db:generate": "npx prisma generate"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "@octokit/auth-app": "^6.0.1",
+    "@octokit/rest": "^20.1.0",
+    "bullmq": "^5.1.0",
+    "express": "^4.18.2",
+    "ioredis": "^5.3.2",
+    "openai": "^4.28.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@prisma/client": "^6.19.3",
     "prisma": "^6.19.3"
   }
 }
